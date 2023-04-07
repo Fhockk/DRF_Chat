@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 
 
 class Thread(models.Model):
+    """
+    Thread Model
+    participants = [value1, value2] - ONLY 2 values
+    """
     participants = models.ManyToManyField(User, related_name='threads', verbose_name='Participant')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -15,6 +19,9 @@ class Thread(models.Model):
 
 
 class Message(models.Model):
+    """
+    Message Model
+    """
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     text = models.TextField()
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='messages')

@@ -7,6 +7,9 @@ from chat.models import Thread, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User
+    """
     class Meta:
         model = User
         fields = ('id', 'username')
@@ -22,6 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Message
+    """
     class Meta:
         model = Message
         fields = ('id', 'text', 'thread', 'sender', 'is_read', 'created')
@@ -39,6 +45,9 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class ThreadSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Thread
+    """
     last_message = serializers.SerializerMethodField()
 
     class Meta:
@@ -65,6 +74,9 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for USER REGISTRATION VIEW
+    """
     email = serializers.CharField(required=True, max_length=64)
     password2 = serializers.CharField(write_only=True)
 

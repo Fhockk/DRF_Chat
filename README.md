@@ -37,6 +37,9 @@ python manage.py runserver
 
 And then open browser, go to [127.0.0.1:8000/api/token/](http://127.0.0.1:8000/api/token/)
 
+## I INTENTIONALLY LEFT ALL ENVIRONMENT VARIABLES WITHOUT USING AN .ENV FILE TO TEST THIS APPLICATION THOROUGHLY.
+
+
 First, you need to login:
 
 

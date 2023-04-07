@@ -9,6 +9,10 @@ from chat.serializers import ThreadSerializer, MessageSerializer, UserRegisterSe
 
 
 class ThreadListCreateView(generics.ListCreateAPIView):
+    """
+    GET the list of Threads for requested user;
+    CREATE Thread
+    """
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     permission_classes = (IsAuthenticated, )
@@ -19,12 +23,20 @@ class ThreadListCreateView(generics.ListCreateAPIView):
 
 
 class ThreadUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    GET Thread by id
+    UPDATE Thread by id
+    Delete Thread by id
+    """
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     permission_classes = (IsAuthenticated, )
 
 
 class UserThreadListView(generics.ListAPIView):
+    """
+    GET Threads by User id
+    """
     serializer_class = ThreadSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -50,6 +62,10 @@ class UserThreadListView(generics.ListAPIView):
 
 
 class MessageListCreateView(generics.ListCreateAPIView):
+    """
+    GET Messages of thread by id(thread)
+    CREATE Message of thread by id(thread) IF you are participant of this Thread
+    """
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
@@ -60,6 +76,10 @@ class MessageListCreateView(generics.ListCreateAPIView):
 
 
 class MessageReadView(generics.RetrieveDestroyAPIView):
+    """
+    GET Message of Thread by id(thread) and id(message) and READ it if you are
+    participant of this Thread and NOT A SENDER
+    """
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
@@ -74,6 +94,9 @@ class MessageReadView(generics.RetrieveDestroyAPIView):
 
 
 class GetUnreadMessageView(generics.ListAPIView):
+    """
+    GET Unread Messages from all Threads by id(User)
+    """
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -99,6 +122,15 @@ class GetUnreadMessageView(generics.ListAPIView):
 
 
 class UserRegisterView(generics.CreateAPIView):
+    """
+    CREATE USER
+    {
+        "username":"text" (unique)
+        "email":"someemail@mail.com";
+        "password":"123";
+        "password2":"123"
+    }
+    """
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
     permission_classes = (AllowAny,)
