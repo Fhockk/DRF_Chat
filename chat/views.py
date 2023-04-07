@@ -1,10 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+
 from django.contrib.auth.models import User
 
 from chat.models import Thread, Message
-from chat.serializers import ThreadSerializer, MessageSerializer
+from chat.serializers import ThreadSerializer, MessageSerializer, UserRegisterSerializer
 
 
 class ThreadListCreateView(generics.ListCreateAPIView):
@@ -57,7 +57,7 @@ class MessageListCreateView(generics.ListCreateAPIView):
         return Message.objects.filter(thread_id=thread_id)
 
 
-class MessageReadView(generics.RetrieveAPIView):
+class MessageReadView(generics.RetrieveDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
@@ -92,3 +92,19 @@ class GetUnreadMessageView(generics.ListAPIView):
             return Response(serializer.data)
         else:
             return Response({"error": "Invalid pk or object does not exist"})
+
+
+class UserRegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        response_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)

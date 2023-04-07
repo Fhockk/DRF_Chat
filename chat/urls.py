@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 from chat.views import (ThreadListCreateView, ThreadUpdateDeleteView, MessageListCreateView,
-                        MessageReadView, UserThreadListView, GetUnreadMessageView)
+                        MessageReadView, UserThreadListView, GetUnreadMessageView,
+                        UserRegisterView)
 
 
 urlpatterns = [
@@ -10,4 +11,5 @@ urlpatterns = [
     path('threads/<int:thread_id>/messages/', MessageListCreateView.as_view(), name='messages_list_create'),
     path('threads/<int:thread_id>/messages/<int:pk>/', MessageReadView.as_view(), name='message_read'),
     path('users/<int:pk>/messages/', GetUnreadMessageView.as_view(), name='get_messages_unread'),
+    path('users/register/', UserRegisterView.as_view(), name='user_register'),
 ]
