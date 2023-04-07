@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from django.contrib.auth.models import User
@@ -10,22 +11,22 @@ from chat.serializers import ThreadSerializer, MessageSerializer, UserRegisterSe
 class ThreadListCreateView(generics.ListCreateAPIView):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
+    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
-            return Thread.objects.filter(participants=user)
-        else:
-            return Thread.objects.all()
+        return Thread.objects.filter(participants=user)
 
 
 class ThreadUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
+    permission_classes = (IsAuthenticated, )
 
 
 class UserThreadListView(generics.ListAPIView):
     serializer_class = ThreadSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self, **kwargs):
         pk = kwargs.get('pk', None)
@@ -51,6 +52,7 @@ class UserThreadListView(generics.ListAPIView):
 class MessageListCreateView(generics.ListCreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         thread_id = self.kwargs['thread_id']
@@ -60,6 +62,7 @@ class MessageListCreateView(generics.ListCreateAPIView):
 class MessageReadView(generics.RetrieveDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         message = self.get_object()
@@ -72,6 +75,7 @@ class MessageReadView(generics.RetrieveDestroyAPIView):
 
 class GetUnreadMessageView(generics.ListAPIView):
     serializer_class = MessageSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self, **kwargs):
         pk = kwargs.get('pk', None)
@@ -97,6 +101,7 @@ class GetUnreadMessageView(generics.ListAPIView):
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

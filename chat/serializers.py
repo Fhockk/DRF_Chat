@@ -25,10 +25,11 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('id', 'text', 'thread', 'sender', 'is_read', 'created')
-        read_only_fields = ('id', 'thread', 'created')  # add sender here
+        read_only_fields = ('id', 'thread', 'created', 'sender')
 
     def create(self, validated_data):
         request = self.context.get('request')
+        validated_data['sender'] = request.user
         thread_id = request.parser_context.get('kwargs').get('thread_id')
         thread = get_object_or_404(Thread, id=thread_id)
         if validated_data['sender'] not in thread.participants.all():
@@ -46,6 +47,8 @@ class ThreadSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         valid_participants = validated_data.get('participants')
+        if len(valid_participants) != 2:
+            raise serializers.ValidationError("The thread can only have 2 participants")
         thread = Thread.objects.filter(participants=valid_participants[0]).filter(participants=valid_participants[1]).first()
         if not thread:
             thread = Thread.objects.create()
