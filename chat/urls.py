@@ -5,7 +5,6 @@ from chat.views import (ThreadListCreateView, ThreadUpdateDeleteView, MessageLis
                         MessageReadView, UserThreadListView, GetUnreadMessageView,
                         UserRegisterView)
 
-
 urlpatterns = [
     path('users/register/', UserRegisterView.as_view(), name='user_register'),  # User Register
     path('users/<int:pk>/messages/', GetUnreadMessageView.as_view(), name='messages_unread'),  # Unread Messages by User Id
